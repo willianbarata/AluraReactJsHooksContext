@@ -1,4 +1,4 @@
-import { Typography } from "@material-ui/core";
+import { StepLabel, Stepper, Step, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import DadosEntrega from "./DadosEntrega";
@@ -11,13 +11,16 @@ function FormularioCadastro({aoEnviar, validarCPF}) {
   const [dadosColetados, setDados] = useState({});
 
   useEffect(()=> {
-    console.log(dadosColetados);
+    if(etapaAtual === formularios.length-1){
+      aoEnviar(dadosColetados);
+    }
   });
 
   const formularios = [
     <DadosUsuario aoEnviar={coletarDados}/>,
     <DadosPessoais aoEnviar={coletarDados} validarCPF={validarCPF}/>,
-    <DadosEntrega aoEnviar={coletarDados} />
+    <DadosEntrega aoEnviar={coletarDados} />,
+    <Typography variant="h5">Obrigado Pelo Cadastro</Typography>
   ]
 
   function coletarDados(dados){
@@ -31,6 +34,20 @@ function FormularioCadastro({aoEnviar, validarCPF}) {
 
   return (
     <>
+      <Stepper activeStep={etapaAtual} >
+        <Step>
+          <StepLabel>Login</StepLabel> 
+        </Step>
+        <Step>
+            <StepLabel>Dados Pessoais</StepLabel> 
+        </Step>
+        <Step>
+            <StepLabel>Entrega</StepLabel> 
+        </Step>
+        <Step>
+           <StepLabel>Finalização</StepLabel>
+        </Step>
+      </Stepper>
       {formularios[etapaAtual]}
     </>
     );
